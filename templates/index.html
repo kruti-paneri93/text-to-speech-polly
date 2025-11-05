@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎙️ AI Podcast Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: #e0e0e0;
+        }
+
+        .slider-container {
+            margin-bottom: 20px;
+        }
+
+        .slider-value {
+            display: inline-block;
+            margin-left: 10px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            padding: 0;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #667eea;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #667eea;
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .info-box .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .info-box .label {
+            font-size: 12px;
+            color: #a0a0a0;
+            margin-top: 5px;
+        }
+
+        .output-section {
+            grid-column: 1 / -1;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        audio {
+            width: 100%;
+            height: 50px;
+        }
+
+        .download-btn {
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.active {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            color: #81c784;
+        }
+
+        .alert-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.4);
+            color: #ef5350;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎙️ AI Podcast Generator</h1>
+            <p>Transform your text into natural-sounding audio with Amazon Polly</p>
+        </div>
+
+        <div class="alert alert-success" id="successAlert"></div>
+        <div class="alert alert-error" id="errorAlert"></div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>📝 Input Text</h2>
+                
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <div style="font-size: 48px; margin-bottom: 10px;">📁</div>
+                    <p style="color: #b0b0b0;">Click to upload a text file</p>
+                    <p style="font-size: 12px; color: #808080; margin-top: 5px;">or paste your text below</p>
+                    <input type="file" id="fileInput" accept=".txt">
+                </div>
+
+                <div class="form-group">
+                    <label>Your Text:</label>
+                    <textarea id="textInput" placeholder="Enter or paste your article, blog post, or any text you want to convert to speech..."></textarea>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-box">
+                        <div class="value" id="charCount">0</div>
+                        <div class="label">Characters</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="value" id="wordCount">0</div>
+                        <div class="label">Words</div>
+                    </div>
+                    <div class="info-box">
+                        <div class="value" id="estimatedTime">0:00</div>
+                        <div class="label">Est. Duration</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>⚙️ Voice Settings</h2>
+                
+                <div class="form-group">
+                    <label>Select Voice:</label>
+                    <select id="voiceSelect">
+                        <option value="">Loading voices...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Engine Type:</label>
+                    <select id="engineSelect">
+                        <option value="neural">Neural (More Natural) ⚡</option>
+                        <option value="standard">Standard</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="useSSML">
+                    <label for="useSSML" style="margin-bottom: 0;">Enable SSML (Natural Pauses)</label>
+                </div>
+
+                <div class="slider-container" id="ssmlControls" style="display: none;">
+                    <div class="form-group">
+                        <label>Speaking Rate: <span class="slider-value" id="rateValue">medium</span></label>
+                        <select id="rateSelect">
+                            <option value="x-slow">Extra Slow</option>
+                            <option value="slow">Slow</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="fast">Fast</option>
+                            <option value="x-fast">Extra Fast</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pitch: <span class="slider-value" id="pitchValue">medium</span></label>
+                        <select id="pitchSelect">
+                            <option value="x-low">Extra Low</option>
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                            <option value="x-high">Extra High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" id="generateBtn">
+                        🎵 Generate Podcast
+                    </button>
+                    <button class="btn-secondary" id="clearBtn">
+                        🗑️ Clear
+                    </button>
+                </div>
+            </div>
+
+            <div class="card output-section">
+                <h2>🎧 Output</h2>
+                
+                <div class="loading" id="loadingDiv">
+                    <div class="spinner"></div>
+                    <p>Generating your podcast... Please wait.</p>
+                </div>
+
+                <div id="outputSection" style="display: none;">
+                    <div class="audio-player">
+                        <audio id="audioPlayer" controls>
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <button class="btn-primary download-btn" id="downloadBtn">
+                        📥 Download MP3
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let voices = {};
+        let currentAudioUrl = '';
+
+        // Load voices on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadVoices();
+            updateCharCount();
+        });
+
+        // Load available voices
+        async function loadVoices() {
+            try {
+                const response = await fetch('/api/voices');
+                voices = await response.json();
+                populateVoiceSelect();
+            } catch (error) {
+                showError('Failed to load voices: ' + error.message);
+            }
+        }
+
+        // Populate voice dropdown
+        function populateVoiceSelect() {
+            const select = document.getElementById('voiceSelect');
+            select.innerHTML = '';
+
+            // Popular voices first
+            const popular = ['Joanna', 'Matthew', 'Amy', 'Brian', 'Emma', 'Justin'];
+            
+            const popularGroup = document.createElement('optgroup');
+            popularGroup.label = '⭐ Popular Voices';
+            
+            for (const lang in voices) {
+                voices[lang].forEach(voice => {
+                    if (popular.includes(voice.name)) {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.gender})`;
+                        popularGroup.appendChild(option);
+                    }
+                });
+            }
+            select.appendChild(popularGroup);
+
+            // All other voices by language
+            for (const lang in voices) {
+                const group = document.createElement('optgroup');
+                group.label = voices[lang][0].language;
+                
+                voices[lang].forEach(voice => {
+                    if (!popular.includes(voice.name)) {
+                        const option = document.createElement('option');
+                        option.value = voice.name;
+                        option.textContent = `${voice.name} (${voice.gender})`;
+                        group.appendChild(option);
+                    }
+                });
+                
+                select.appendChild(group);
+            }
+        }
+
+        // File upload handler
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('textInput').value = result.text;
+                    updateCharCount();
+                    showSuccess('File uploaded successfully!');
+                } else {
+                    showError(result.error);
+                }
+            } catch (error) {
+                showError('Failed to upload file: ' + error.message);
+            }
+        });
+
+        // Update character count
+        document.getElementById('textInput').addEventListener('input', updateCharCount);
+
+        function updateCharCount() {
+            const text = document.getElementById('textInput').value;
+            const chars = text.length;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const estimatedMinutes = Math.ceil(words / 150); // Average 150 words per minute
+            const estimatedSeconds = estimatedMinutes * 60;
+            
+            document.getElementById('charCount').textContent = chars;
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('estimatedTime').textContent = 
+                Math.floor(estimatedSeconds / 60) + ':' + 
+                String(estimatedSeconds % 60).padStart(2, '0');
+        }
+
+        // SSML toggle
+        document.getElementById('useSSML').addEventListener('change', function() {
+            document.getElementById('ssmlControls').style.display = 
+                this.checked ? 'block' : 'none';
+        });
+
+        // Update rate display
+        document.getElementById('rateSelect').addEventListener('change', function() {
+            document.getElementById('rateValue').textContent = this.value;
+        });
+
+        // Update pitch display
+        document.getElementById('pitchSelect').addEventListener('change', function() {
+            document.getElementById('pitchValue').textContent = this.value;
+        });
+
+        // Generate podcast
+        document.getElementById('generateBtn').addEventListener('click', async function() {
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (!text) {
+                showError('Please enter some text!');
+                return;
+            }
+
+            const voice = document.getElementById('voiceSelect').value;
+            const engine = document.getElementById('engineSelect').value;
+            const useSSML = document.getElementById('useSSML').checked;
+            const rate = document.getElementById('rateSelect').value;
+            const pitch = document.getElementById('pitchSelect').value;
+
+            // Show loading
+            document.getElementById('loadingDiv').classList.add('active');
+            document.getElementById('outputSection').style.display = 'none';
+            this.disabled = true;
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        voice: voice,
+                        engine: engine,
+                        useSSML: useSSML,
+                        rate: rate,
+                        pitch: pitch
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentAudioUrl = result.downloadUrl;
+                    document.getElementById('audioPlayer').src = result.downloadUrl;
+                    document.getElementById('outputSection').style.display = 'block';
+                    showSuccess('Podcast generated successfully! Size: ' + 
+                        (result.size / 1024).toFixed(2) + ' KB');
+                } else {
+                    showError(result.error);
+                }
+            } catch (error) {
+                showError('Failed to generate podcast: ' + error.message);
+            } finally {
+                document.getElementById('loadingDiv').classList.remove('active');
+                this.disabled = false;
+            }
+        });
+
+        // Download button
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (currentAudioUrl) {
+                window.location.href = currentAudioUrl;
+            }
+        });
+
+        // Clear button
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('outputSection').style.display = 'none';
+            currentAudioUrl = '';
+            updateCharCount();
+        });
+
+        // Alert functions
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            alert.textContent = message;
+            alert.classList.add('active');
+            setTimeout(() => alert.classList.remove('active'), 5000);
+        }
+
+        function showError(message) {
+            const alert = document.getElementById('errorAlert');
+            alert.textContent = message;
+            alert.classList.add('active');
+            setTimeout(() => alert.classList.remove('active'), 5000);
+        }
+    </script>
+</body>
+</html>
