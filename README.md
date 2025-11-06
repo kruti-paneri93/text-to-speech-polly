@@ -8,7 +8,10 @@ This project provides two ways to convert text to speech using AWS Polly:
 Both approaches use `boto3` to call AWS Polly. Generated audio files are saved to the `output/` folder.
 
 ## Demo
+**Web Demo:**
 ![Web UI](assets/conversion.png) ![Web UI](assets/generated.png)
+
+**CLI Demo:**
 ![CLI](assets/cli.png)
 
 ## Prerequisites
